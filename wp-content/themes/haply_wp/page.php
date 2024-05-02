@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying all pages
  *
@@ -15,17 +16,17 @@
 get_header();
 ?>
 
-	<main id="primary" class="site-main" style="min-height:calc(100vh - 100px)">
+<main id="primary" class="site-main" style="min-height:calc(100vh - 100px)">
 	<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<h2><?php the_title();?></h2>
-			<p><?php the_content();?></p>
+		<div class="row">
+			<div class="col-lg-12">
+				<h2><?php the_title(); ?></h2>
+				<?php the_content(); ?>
+			</div>
 		</div>
 	</div>
-</div>
 
-	</main><!-- #main -->
+</main><!-- #main -->
 
 <?php
 

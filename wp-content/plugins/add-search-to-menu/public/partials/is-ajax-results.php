@@ -135,7 +135,8 @@ if ($is_index_search && $index_empty) : ?>
 	} else if (empty($tags) && empty($categories)) {
 	?>
 		<div class="is-ajax-search-no-result">
-			<?php echo html_entity_decode($field['nothing_found_text']); ?>
+			<?php //echo html_entity_decode($field['nothing_found_text']); 
+			?>Intet fundet
 		</div>
 	<?php
 	}

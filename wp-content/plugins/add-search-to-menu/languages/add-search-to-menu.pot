@@ -554,7 +554,7 @@ msgid "Search Form Customizer"
 msgstr ""
 
 #: ../admin/class-is-editor.php:792 ../public/class-is-ajax.php:70
-msgid "Nothing found"
+msgid "Nothing found 2"
 msgstr ""
 
 #: ../admin/class-is-editor.php:795
@@ -1457,7 +1457,7 @@ msgid "Events will be as below:"
 msgstr ""
 
 #: ../admin/class-is-settings-fields.php:467
-msgid "Category - Results Found / Nothing Found"
+msgid "Category - Results Found / Nothing Found 11"
 msgstr ""
 
 #: ../admin/class-is-settings-fields.php:468

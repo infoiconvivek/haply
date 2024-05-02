@@ -1,132 +1,48 @@
 <?php /*Template Name: Home*/
 get_header();
+echo '<div class="leftImg"><div class="container-fluid">';
+
+if (THEME_NAME == 'black') {
+
+    $custom_front_page_id = get_option('custom_front_page_id');
+
+    if (is_front_page()) :
+        query_posts("page_id=" . $custom_front_page_id);
+    endif;
+
+    while (have_posts()) : the_post();
+        the_content();
+    endwhile;
+    //wp_reset_query();
+
+    //get_template_part('home', THEME_NAME);
+} else {
+    //query_posts("page_id=2926");
+    while (have_posts()) : the_post();
+        the_content();
+    endwhile;
+    //wp_reset_query();
+
+
+    //get_template_part('home', THEME_NAME);
+}
 ?>
-<section class="about1">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-8 col-md-12 col-sm-12">
-                <div class="about_sec">
-                    <div class="line "></div>
-                    <h1 class="h1">
-                        <?php echo get_field('home-section')['text']; ?>
-
-                    </h1>
-
-                    <div class="inline_btn">
-                        <a href="<?php print_r(get_field('home-section')['free_url1']['url']); ?>" class="btn custom-btn"><?php esc_html_e(get_field('home-section')['free_url1']['title'], 'HaplyWP') ?></a>
-                        <a href="<?php echo get_field('home-section')['demo_url1']['url']; ?>" class="btn hover-btn "><?php esc_html_e(get_field('home-section')['demo_url1']['title'], 'HaplyWP') ?></a> <!--Prøv vores demo-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<?php
-
-$mid_section = get_field('home-sec');
-
-
-?>
-
-<section class="leftImg">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="leftImg img ">
-                    <div class="leftImg_style">
-                        <img src="<?php echo $mid_section['image']['url']; ?>" alt="<?php echo $mid_section['image']['title']; ?>" class="img-fluid">
-                        <!--<p class="digit">3:2</p>-->
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 col-lg-6">
-                <div class="leftImg content lg-pl-34">
-                    <div class="heading position-relative" id="home-content-wrap">
-
-                        <h3><?php echo  $mid_section['heading']; ?></h3>
-                        <div class="text_content">
-                            <?php //echo $mid_section['content'];
-                            //echo mb_strimwidth($mid_section['content'], 0, 1100, "...");                                
-                            ?>
-
-                        </div>
-                        <!--<button class="show-more-button">...</button>-->
-
-                    </div>
-
-                    <a href="<?php echo get_field('home-sec')['home_sec2_url']['url']; ?>" class="btn custom-btn"><?php esc_html_e(get_field('home-sec')['home_sec2_url']['title'], 'HaplyWP') ?></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="about heading-noly">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-8 col-md-12 col-sm-12">
-                <div class="about_sec">
-                    <div class="line"></div>
-                    <h2 class="h2"><?php echo get_field('heading'); ?></h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<?php
-//echo "<pre>";
-$third_section = get_field('home-third');
-//print_r( get_field('home-section'));
-
-?>
-<section class="leftImg right-img">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 col-lg-6">
-                <div class="leftImg content pr-34">
-                    <div class="heading">
-                        <h3><?php echo $third_section['heading']; ?></h3>
-                        <?php
-                        //echo mb_strimwidth($third_section['text'], 0, 1100, "...");
-                        ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 col-lg-6">
-                <div class="leftImg img">
-                    <div class="leftImg_style">
-                        <img src="<?php echo $third_section['image']['url']; ?>" alt="" class="img-fluid">
-                        <!--<p class="digit">3:2</p>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- <section class="about">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="about_sec">
-                        <div class="line"></div>
-                        <h1 class="h1">Featured guides to haply <br> products</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
+</div>
+</div>
 <section class="feature">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-8 col-md-12 col-sm-12">
                 <div class="about_sec">
                     <div class="line"></div>
-                    <h1 class="h1"><?php echo get_field('related_article_heading'); ?></h1>
+                    <h2 class="h1"><?php
+                                    if (THEME_NAME == 'black') {
+                                        echo get_field('related_article_heading_geonote');
+                                    } else {
+                                        echo get_field('related_article_heading_haply');
+                                    }
+
+                                    ?></h2>
 
                 </div>
             </div>
@@ -134,7 +50,7 @@ $third_section = get_field('home-third');
         <div class="row">
             <?php
 
-            $meta_query = array(
+            /*$meta_query = array(
                 array(
                     'key'     => 'manage_theme',
                     'value'   => THEME_NAME ? THEME_NAME : 'green', // THEME_NAME come form wp_config.php 
@@ -146,8 +62,55 @@ $third_section = get_field('home-third');
             $args = array(
                 'post_type' => 'epkb_post_type_1', // Your custom post type
                 'posts_per_page' => '3', // Change the number to whatever you wish
+                'post_status' => 'publish',
                 'meta_query' => $meta_query,
+            );*/
+
+
+            if (THEME_NAME == 'black') {
+                $active_theme = 'geonote';
+            } else if (THEME_NAME == 'green') {
+                $active_theme = 'haply';
+            } else {
+                $active_theme = 'null';
+            }
+
+
+            $categories = array();
+
+            // Step 1: Retrieve categories with the active theme.
+            $theme_categories = get_terms(array(
+                'taxonomy' => 'epkb_post_type_1_category',
+                'meta_query' => array(
+                    array(
+                        'key' => 'manage_theme',
+                        'value' => $active_theme,
+                        'compare' => 'like'
+                    ),
+                ),
+                'fields' => 'ids',
+            ));
+            //print_r($theme_categories);die;
+            if (!empty($theme_categories)) {
+                $categories = $theme_categories;
+            }
+
+            // Step 2: Define arguments for WP_Query.
+            $args = array(
+                'post_type' => 'epkb_post_type_1', // Change this if you're using a custom post type.
+                'posts_per_page' => 3, // Change this to limit the number of posts displayed.
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'epkb_post_type_1_category',
+                        'field' => 'term_id',
+                        'terms' => $categories,
+                    ),
+                ),
+                'orderby' => 'date', // Default ordering.
+                'order' => 'DESC',   // Default ordering.
             );
+
+
             $new_query = new WP_Query($args);
             if ($new_query->have_posts()) :
                 while ($new_query->have_posts()) :
@@ -166,8 +129,14 @@ $third_section = get_field('home-third');
                             </div>
 
                             <div class="content-style">
-                                <h2><?php the_title(); ?></h2>
-                                <h4><?php echo wp_trim_words(get_the_excerpt(), '10', '...'); ?></h4>
+                                <h3><?php the_title(); ?></h3>
+                                <p><?php
+                                    if (get_field('article_excerpt')) {
+                                        echo get_field('article_excerpt');
+                                    } else {
+                                        echo wp_trim_words(get_the_excerpt(), '55', '...');
+                                    }
+                                    ?></p>
 
 
                                 <div class="user">
@@ -177,8 +146,9 @@ $third_section = get_field('home-third');
                                     </div>
 
                                     <div class="user-info">
-                                        <h4><?php echo get_author_name(); ?></h4>
-                                        <h4><?php echo get_the_date(); ?></h4>
+                                        <h5><?php echo get_author_name(); ?></h5>
+                                        <h5><?php //echo get_the_date(); 
+                                            ?><?php echo get_the_modified_time('d.m.Y') ?></h5>
                                     </div>
                                 </div>
 
@@ -192,8 +162,28 @@ $third_section = get_field('home-third');
 
             <div class="col-lg-12">
                 <div class="text-center">
-                    <a href="<?php echo get_field('related_article_button')['url'];  ?>" class="btn hover-btn featureBtn"><?php echo get_field('related_article_button')['title'] ? get_field('related_article_button')['title'] : 'See all how-to articles'; //esc_html_e( 'See all how-to articles', 'HaplyWP' )
-                                                                                                                            ?> </a>
+                    <a href="<?php
+                                if (THEME_NAME == 'black') {
+                                    if (isset(get_field('related_article_button_geonote')['url'])) {
+                                        echo get_field('related_article_button_geonote')['url'];
+                                    }
+                                } else {
+                                    if (isset(get_field('related_article_button_haply')['url'])) {
+                                        echo get_field('related_article_button_haply')['url'];
+                                    }
+                                }
+
+                                ?>" class="btn hover-btn featureBtn"><?php
+                                                                        if (THEME_NAME == 'black') {
+                                                                            if (isset(get_field('related_article_button_geonote')['title'])) {
+                                                                                echo get_field('related_article_button_geonote')['title'];
+                                                                            }
+                                                                        } else {
+                                                                            if (isset(get_field('related_article_button_haply')['title'])) {
+                                                                                echo get_field('related_article_button_haply')['title'];
+                                                                            }
+                                                                        }
+                                                                        ?> </a>
 
                 </div>
 
@@ -201,4 +191,6 @@ $third_section = get_field('home-third');
         </div>
     </div>
 </section>
-<?php get_footer(); ?>
+
+<?php
+get_footer();

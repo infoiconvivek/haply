@@ -12,10 +12,10 @@ echo '<style>';
 echo $glt_css;
 
 if(get_option('googlelanguagetranslator_flags') == 1) {
-    if(get_option('googlelanguagetranslator_display') == 'Vertical') {
+    if($glt_display == 'Vertical') {
         echo 'p.hello{font-size:12px;color:darkgray;}';
         echo '#google_language_translator,#flags{text-align:left;}';
-    } elseif(get_option('googlelanguagetranslator_display') == 'Horizontal') {
+    } elseif($glt_display == 'Horizontal') {
         if(get_option('googlelanguagetranslator_flags_alignment') == 'flags_right') {
             echo '#google_language_translator{text-align:left!important;}';
             echo 'select.goog-te-combo{float:right;}';
@@ -26,7 +26,7 @@ if(get_option('googlelanguagetranslator_flags') == 1) {
         echo '.goog-te-gadget{margin-top:2px!important;}';
         echo 'p.hello{font-size:12px;color:#666;}';
         echo 'div.skiptranslate.goog-te-gadget{display:inline!important;}';
-    } elseif(get_option('googlelanguagetranslator_display') == 'SIMPLE' and get_option('googlelanguagetranslator_flags_alignment') == 'flags_right') {
+    } elseif($glt_display == 'SIMPLE' and get_option('googlelanguagetranslator_flags_alignment') == 'flags_right') {
         echo '.goog-te-gadget{float:right;clear:right;}';
         echo 'div.skiptranslate.goog-te-gadget{display:inline!important;}';
     }
@@ -54,7 +54,7 @@ if(get_option('googlelanguagetranslator_active') == 1) {
     if(get_option('googlelanguagetranslator_showbranding') == 'Yes') {
         echo '#google_language_translator{width:auto!important;}';
         echo 'div.skiptranslate.goog-te-gadget{display:inline!important;}';
-    } elseif(get_option('googlelanguagetranslator_showbranding') == 'No' and get_option('googlelanguagetranslator_display') != 'SIMPLE') {
+    } elseif(get_option('googlelanguagetranslator_showbranding') == 'No' and $glt_display != 'SIMPLE') {
         echo '#google_language_translator a{display:none!important;}';
         echo 'div.skiptranslate.goog-te-gadget{display:inline!important;}';
         echo '.goog-te-gadget{color:transparent!important;}';
@@ -84,6 +84,7 @@ if(get_option('googlelanguagetranslator_active') == 1) {
     }
     echo 'body{top:0px!important;}';
     echo '#goog-gt-{display:none!important;}';
+    echo 'font font{background-color:transparent!important;box-shadow:none!important;position:initial!important;}';
 }
 
 if($floating_widget_position == 'bottom_left') {

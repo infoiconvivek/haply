@@ -11,7 +11,8 @@ Author Name: Haply-WP
 .search {
     margin: 1rem 0 !important;
 }
-div#how_to_datafetch {
+div#how_to_datafetch,
+.custom_search_dropdown  {
     position: absolute;
     top: 50px;
     border: 1px solid #f9f9f9;

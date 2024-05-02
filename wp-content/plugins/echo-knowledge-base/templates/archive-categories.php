@@ -338,8 +338,8 @@ else if(ICL_LANGUAGE_CODE=='da'){ echo 'Vejledninger';}?></a></li>
 
 <div class="search" >
 	<?php //echo do_shortcode('[ivory-search id="597" title="ajax_archive"]'); ?>
-                             <form class="search-form wow slideInUp" id="search-category">
-                                <input class="form-control search_input ss" id="how_keyword" type="text" placeholder="<?php if(ICL_LANGUAGE_CODE=='en'){ echo 'Search in categories'; } 
+                             <form class="search-form wow slideInUp" id="search-category" action="" method="get">
+                                <input class="form-control search_input" name="cat_search" value="<?php echo $_GET['cat_search']?>" id="how_keyword" type="text" placeholder="<?php if(ICL_LANGUAGE_CODE=='en'){ echo 'Søg i kategorier'; } 
 else if(ICL_LANGUAGE_CODE=='da'){ echo 'Søg i kategorier';}?>" onkeyup="how_fetch_articles(this)">
                                 <button class="btn btn-search" type="submit">
                                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -387,8 +387,8 @@ function epkb_main_content( $args ) {
 	// if category has no article then show proper message
 	if ( ! have_posts() ) {
 		//echo '<main class="eckb-category-archive-main ' . esc_attr($preset_style) . '"><p>' . $args['config']['category_empty_msg'] . '</p></main>';
-        <main class="eckb-category-archive-main <?php echo esc_attr($preset_style) ?>"><p><?php if(ICL_LANGUAGE_CODE=='en'){ echo 'Articles coming soon' ; } 
-									else if(ICL_LANGUAGE_CODE=='da'){ echo 'Artikler kommer snart' ; }?></p></main>
+		?><main class="eckb-category-archive-main <?php echo esc_attr($preset_style) ?>"><p><?php if(ICL_LANGUAGE_CODE=='en'){ echo 'Articles coming soon' ; } 
+		else if(ICL_LANGUAGE_CODE=='da'){ echo 'Artikler kommer snart' ; }?></p></main><?php
 		return;
 	}
 
@@ -411,6 +411,7 @@ function epkb_main_content( $args ) {
                     //'orderby' => 'tax_position',
 					'orderby'=>'name',
 					'order' => 'asc',
+					'name__like' =>  @$_GET['cat_search'],
 				);
 
 				$terms = get_terms('epkb_post_type_1_category', $args);
@@ -429,7 +430,7 @@ function epkb_main_content( $args ) {
 						$image = get_field('image', $taxonomy . '_' . $term_id);
 						$video = get_field('video', $taxonomy . '_' . $term_id);
 
-						echo '<div class="col-lg-3 col-md-3">
+						echo '<div class="col-lg-3 col-md-6">
 						<div class="category-box">
 							<div class="category-img">';
 
@@ -506,6 +507,7 @@ if(strlen( $term->name) > 20){
 					'post_type' => EPKB_KB_Handler::get_post_type( $kb_id ),
 					'orderby' => 'title',
 					'order' => 'ASC',
+                    's' => @$_GET['cat_search'],
 					'paged'         => $paged, 
 					'tax_query' => array(
 						array(
@@ -516,7 +518,7 @@ if(strlen( $term->name) > 20){
 					),
 					'meta_query' => $meta_query,  // this is custom code form multi theme 
 				);
-
+				
 			} else if ( $articles_sequence == 'user-sequenced' ) {
 
 				// articles with no categories - temporary add one
@@ -656,10 +658,15 @@ if(strlen( $term->name) > 20){
 						</div>
 						<div class="col-lg-6 cstm-blog-details-col">
 							<h3><a href="<?php echo $article_link; ?>"  <?php echo $new_tab; ?>><?php the_title(); ?></a></h3>
-							<h4>Redigeret <?php echo get_the_modified_time('F jS, Y')?></h4>
+							<h4>Redigeret <?php //echo get_the_modified_time('F jS, Y')?><?php echo get_the_modified_time('d.m.Y')?></h4>
 							<p><?php $content = get_field('article_excerpt');
-								echo $content ? substr($content, 0, 300)
-								:strip_tags(substr(get_the_content(), 0, 300));
+                            	if($content){
+                                	echo wp_trim_words($content, 300, '...');
+                                }else{
+                                	echo wp_trim_words(strip_tags(get_the_content()), 300, '...');
+                                }
+                            
+								//echo $content ? substr($content, 0, 300):strip_tags(substr(get_the_content(), 0, 300));
 							?>
 							</p>
 						</div>	
@@ -697,10 +704,12 @@ if(strlen( $term->name) > 20){
 				</article>	
 				<?php
 			}
-		}}
+		}
+	}
+        
 
         // end custom feature post add featrue by vivek
-
+	if (have_posts()) {
 		while ( have_posts() ) {
 
 			the_post();
@@ -749,10 +758,16 @@ if(strlen( $term->name) > 20){
 					</div>
 					<div class="col-lg-6 cstm-blog-details-col">
 						<h3><a href="<?php echo $article_link; ?>"  <?php echo $new_tab; ?>><?php the_title(); ?></a></h3>
-						<h4>Redigeret <?php echo get_the_modified_time('F jS, Y')?></h4>
+						<h4>Redigeret <?php //echo get_the_modified_time('F jS, Y')?><?php echo get_the_modified_time('d.m.Y')?></h4>
 						<p><?php $content = get_field('article_excerpt');
-                        	echo $content ? substr($content, 0, 300)
-                            :strip_tags(substr(get_the_content(), 0, 300));
+                        if($content){
+                                	echo wp_trim_words($content, 300, '...');
+                                }else{
+                                	echo wp_trim_words(strip_tags(get_the_content()), 300, '...');
+                                }
+                                
+                                
+                        	//echo $content ? substr($content, 0, 300):strip_tags(substr(get_the_content(), 0, 300));
                            ?>
                           </p>
 					</div>	
@@ -790,7 +805,9 @@ if(strlen( $term->name) > 20){
 			</article>			    <?php
 
 		}
-
+	}else{
+			echo "Der vises ingen artikler";
+		}
 		the_posts_pagination(
 			array(
 				'prev_text'          => __( 'Previous', 'echo-knowledge-base' ),

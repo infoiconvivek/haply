@@ -2,7 +2,7 @@
 /*
 Plugin Name: Google Language Translator
 Plugin URI: https://gtranslate.io/?xyz=3167
-Version: 6.0.19
+Version: 6.0.20
 Description: The MOST SIMPLE Google Translator plugin.  This plugin adds Google Translator to your website by using a single shortcode, [google-translator]. Settings include: layout style, hide/show specific languages, hide/show Google toolbar, and hide/show Google branding. Add the shortcode to pages, posts, and widgets.
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
@@ -507,6 +507,9 @@ class google_language_translator {
     $simple_layout = ', layout: google.translate.TranslateElement.InlineLayout.SIMPLE';
     $auto_display = ', autoDisplay: false';
     $default_language = get_option('googlelanguagetranslator_language');
+
+    if($floating_widget == 'yes')
+        $simple_layout = '';
 
     if ($is_multilanguage == 1):
       $multilanguagePage = ', multilanguagePage:true';
@@ -1976,6 +1979,10 @@ class GLT_Notices {
 
     // Ignore function that gets ran at admin init to ensure any messages that were dismissed get marked
     public function admin_notice_ignore() {
+        // verify nonce
+        if(!isset($_GET['_wpnonce']) or !wp_verify_nonce($_GET['_wpnonce']))
+            return;
+
         // If user clicks to ignore the notice, update the option to not show it again
         if (isset($_GET[$this->prefix . '_admin_notice_ignore'])) {
             $admin_notices_option = get_option($this->prefix . '_admin_notice', array());
@@ -1986,7 +1993,7 @@ class GLT_Notices {
 
             $admin_notices_option[$key]['dismissed'] = 1;
             update_option($this->prefix . '_admin_notice', $admin_notices_option);
-            $query_str = remove_query_arg($this->prefix . '_admin_notice_ignore');
+            $query_str = remove_query_arg(array($this->prefix . '_admin_notice_ignore', '_wpnonce'));
             wp_redirect($query_str);
             exit;
         }
@@ -1994,6 +2001,10 @@ class GLT_Notices {
 
     // Temp Ignore function that gets ran at admin init to ensure any messages that were temp dismissed get their start date changed
     public function admin_notice_temp_ignore() {
+        // verify nonce
+        if(!isset($_GET['_wpnonce']) or !wp_verify_nonce($_GET['_wpnonce']))
+            return;
+
         // If user clicks to temp ignore the notice, update the option to change the start date - default interval of 14 days
         if (isset($_GET[$this->prefix . '_admin_notice_temp_ignore'])) {
             $admin_notices_option = get_option($this->prefix . '_admin_notice', array());
@@ -2010,7 +2021,7 @@ class GLT_Notices {
             $admin_notices_option[$key]['start'] = $new_start;
             $admin_notices_option[$key]['dismissed'] = 0;
             update_option($this->prefix . '_admin_notice', $admin_notices_option);
-            $query_str = remove_query_arg(array($this->prefix . '_admin_notice_temp_ignore', 'gt_int'));
+            $query_str = remove_query_arg(array($this->prefix . '_admin_notice_temp_ignore', 'gt_int', '_wpnonce'));
             wp_redirect( $query_str );
             exit;
         }
@@ -2086,8 +2097,8 @@ class GLT_Notices {
             );
         }
 
-        $glt_announcement_ignore = esc_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'glt_announcement')));
-        $glt_announcement_temp = esc_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'glt_announcement', 'gt_int' => 2)));
+        $glt_announcement_ignore = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'glt_announcement'))));
+        $glt_announcement_temp = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'glt_announcement', 'gt_int' => 2))));
 
         $notices['glt_announcement'] = array(
             'title' => __('Announcement - Google Language Translator', 'glt'),
@@ -2101,8 +2112,8 @@ class GLT_Notices {
             'int' => 0
         );
 
-        $two_week_review_ignore = esc_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'two_week_review')));
-        $two_week_review_temp = esc_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'two_week_review', 'gt_int' => 6)));
+        $two_week_review_ignore = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'two_week_review'))));
+        $two_week_review_temp = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'two_week_review', 'gt_int' => 6))));
 
         $notices['two_week_review'] = array(
             'title' => __('Please Leave a Review', 'glt'),
@@ -2115,8 +2126,8 @@ class GLT_Notices {
             'int' => 5
         );
 
-        $upgrade_tips_ignore = esc_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'upgrade_tips')));
-        $upgrade_tips_temp = esc_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'upgrade_tips', 'gt_int' => 7)));
+        $upgrade_tips_ignore = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_ignore' => 'upgrade_tips'))));
+        $upgrade_tips_temp = esc_url(wp_nonce_url(add_query_arg(array($this->prefix . '_admin_notice_temp_ignore' => 'upgrade_tips', 'gt_int' => 7))));
 
         if(get_option('googlelanguagetranslator_seo_active') != '1') {
             $notices['upgrade_tips'][] = array(
